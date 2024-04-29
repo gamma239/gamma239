@@ -1,0 +1,142 @@
+package ahorcado;
+
+import java.util.Scanner;
+
+public class Ahorcado {
+
+    private static final String[] PALABRAS = {"ORDENADOR", "PROGRAMACION", "SOFTWARE", "CODIGO", "DESARROLLO"};
+
+    private String palabraSecreta;
+    private char[] palabraDescubierta;
+    private int intentosRestantes;
+
+    public Ahorcado() {
+        palabraSecreta = PALABRAS[(int) (Math.random() * PALABRAS.length)];
+        palabraDescubierta = new char[palabraSecreta.length()];
+        for (int i = 0; i < palabraDescubierta.length; i++) {
+            palabraDescubierta[i] = '_';
+        }
+        intentosRestantes = 6; // Quitamos tres intentos
+    }
+
+    public void dibujarAhorcado() {
+        switch (intentosRestantes) {
+            case 6:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 5:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 4:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|       |");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 3:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|      /|");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 2:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|      /|\\");
+                System.out.println("|");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 1:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|      /|\\");
+                System.out.println("|      / ");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+            case 0:
+                System.out.println("_________");
+                System.out.println("|       |");
+                System.out.println("|       0");
+                System.out.println("|      /|\\");
+                System.out.println("|      / \\");
+                System.out.println("|");
+                System.out.println("|_________");
+                break;
+        }
+    }
+
+    public void jugar() {
+        Scanner scanner = new Scanner(System.in);
+        while (intentosRestantes > 0) {
+            dibujarAhorcado();
+            System.out.println("Palabra: " + String.valueOf(palabraDescubierta));
+            System.out.println("Intentos restantes: " + intentosRestantes);
+            System.out.print("Ingrese una letra o la palabra completa: ");
+            String entrada = scanner.next().toUpperCase(); // Convertir a mayúsculas
+            if (entrada.matches("[A-Z]+")) { // Verifica si la entrada contiene solo letras
+                if (entrada.length() == 1) {
+                    char letra = entrada.charAt(0);
+                    boolean acierto = false;
+                    for (int i = 0; i < palabraSecreta.length(); i++) {
+                        if (Character.toUpperCase(palabraSecreta.charAt(i)) == letra) { // Convertir a mayúsculas
+                            palabraDescubierta[i] = Character.toUpperCase(letra); // Convertir a mayúsculas
+                            acierto = true;
+                        }
+                    }
+                    if (!acierto) {
+                        intentosRestantes--;
+                        System.out.println("¡Incorrecto! Te quedan " + intentosRestantes + " intentos.");
+                    } else {
+                        System.out.println("¡Correcto!");
+                    }
+                } else {
+                    if (entrada.equals(palabraSecreta)) {
+                        System.out.println("¡Felicidades! Has adivinado la palabra: " + palabraSecreta);
+                        return;
+                    } else {
+                        System.out.println("¡Incorrecto!");
+                        intentosRestantes--;
+                        System.out.println("Te quedan " + intentosRestantes + " intentos.");
+                    }
+                }
+                if (String.valueOf(palabraDescubierta).equals(palabraSecreta)) {
+                    System.out.println("¡Felicidades! Has adivinado la palabra: " + palabraSecreta);
+                    return;
+                }
+            } else {
+                System.out.println("Por favor, ingrese solo letras.");
+            }
+        }
+        System.out.println();
+        System.out.println("GAME OVER");
+        System.out.println("¡Has perdido! La palabra secreta era: " + palabraSecreta);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Bienvenido al juego del ahorcado.");
+        Ahorcado juego = new Ahorcado();
+        juego.jugar();
+    }
+}
